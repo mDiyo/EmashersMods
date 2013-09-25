@@ -166,7 +166,7 @@ public class ModItemExtractor extends SocketModule
 			if(pulled != null)
 			{
 				int added = ts.addItemInternal(pulled, true, config.inventory);
-				if(added >0) ts.pullItem(side, false);
+				if(added >0) ts.pullItem(side, true);
 			}
 		}
 	}
@@ -180,7 +180,7 @@ public class ModItemExtractor extends SocketModule
 			if(pulled != null)
 			{
 				int added = ts.addItemInternal(pulled, true, config.inventory);
-				if(added >0) ts.pullItem(side, false);
+				if(added >0) ts.pullItem(side, true);
 			}
 		}
 	}
