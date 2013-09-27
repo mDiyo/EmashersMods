@@ -325,7 +325,7 @@ public class TileSocket extends SocketTileAccess implements ISpecialInventory, I
 	    
 	    powerHandler.readFromNBT(data);
 	    float power = powerHandler.getEnergyStored();
-	    this.setMaxEnergyStored((int)data.getFloat("powerCap"));
+	    if(data.hasKey("powerCap")) this.setMaxEnergyStored((int)data.getFloat("powerCap"));
 	    powerHandler.setEnergy(power);
 	    
 	    
