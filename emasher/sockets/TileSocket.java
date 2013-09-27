@@ -324,6 +324,9 @@ public class TileSocket extends SocketTileAccess implements ISpecialInventory, I
 	    }
 	    
 	    powerHandler.readFromNBT(data);
+	    float power = powerHandler.getEnergyStored();
+	    this.setMaxEnergyStored((int)data.getFloat("powerCap"));
+	    powerHandler.setEnergy(power);
 	    
 	    
 	}
@@ -390,6 +393,7 @@ public class TileSocket extends SocketTileAccess implements ISpecialInventory, I
 		if(powerHandler != null)
 		{
 			powerHandler.writeToNBT(data);
+			data.setFloat("powerCap", powerHandler.getMaxEnergyStored());
 		}
 		
  	}
@@ -1320,6 +1324,11 @@ public class TileSocket extends SocketTileAccess implements ISpecialInventory, I
     {
         return new FluidTankInfo[] { tanks[0].getInfo(), tanks[1].getInfo(), tanks[2].getInfo() };
     }
+	
+	/*
+	 * IPowerReceptor
+	 * 
+	 */
 
 	@Override
 	public PowerReceiver getPowerReceiver(ForgeDirection side)
