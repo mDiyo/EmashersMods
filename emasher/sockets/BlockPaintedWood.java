@@ -47,6 +47,7 @@ public class BlockPaintedWood extends Block
 		}
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
@@ -57,4 +58,10 @@ public class BlockPaintedWood extends Block
         
         
     }
+	
+	@Override
+	public int damageDropped(int meta)
+	{
+		return meta;
+	}
 }
