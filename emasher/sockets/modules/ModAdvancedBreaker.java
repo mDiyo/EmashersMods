@@ -114,6 +114,7 @@ public class ModAdvancedBreaker extends SocketModule
 				
 			}
 			
+			ts.worldObj.removeBlockTileEntity(xo, yo, zo);
 			ts.worldObj.setBlockToAir(xo, yo, zo);
 		}
 		

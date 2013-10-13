@@ -49,7 +49,7 @@ public class ItemGasVialFilled extends Item
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister ir)
 	{
-		textures = new Icon[6];
+		textures = new Icon[7];
 		
 		textures[0] = ir.registerIcon("gascraft:naturalGasVial");
 		textures[1] = ir.registerIcon("gascraft:propellentVial");
@@ -57,6 +57,7 @@ public class ItemGasVialFilled extends Item
 		textures[3] = ir.registerIcon("gascraft:smokeVial");
 		textures[4] = ir.registerIcon("gascraft:toxicGasVial");
 		textures[5] = ir.registerIcon("gascraft:neurotoxinVial");
+		textures[6] = ir.registerIcon("gascraft:corrosiveGasVial");
 		
 		this.itemIcon = textures[0];
 	}
@@ -74,6 +75,7 @@ public class ItemGasVialFilled extends Item
 		case 3: return new FluidStack(EmasherGas.fluidSmoke, v);
 		case 4: return new FluidStack(EmasherGas.fluidToxicGas, v);
 		case 5: return new FluidStack(EmasherGas.fluidNeurotoxin, v);
+		case 6: return new FluidStack(EmasherGas.fluidCorrosiveGas, v);
 		default: return new FluidStack(EmasherGas.fluidNaturalGas, v);
 		}
 	}
@@ -102,6 +104,9 @@ public class ItemGasVialFilled extends Item
 		case 5:
 			name = "neurotoxin";
 			break;
+		case 6:
+			name = "corrosiveGas";
+			break;
 		}
 		return getUnlocalizedName() + "." + name;
 	 }
@@ -110,7 +115,7 @@ public class ItemGasVialFilled extends Item
 	@SideOnly(Side.CLIENT)
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{	
-		for(int i = 0; i < 6; i++) par3List.add(new ItemStack(par1, 1, i));
+		for(int i = 0; i < 7; i++) par3List.add(new ItemStack(par1, 1, i));
     }
 
 	

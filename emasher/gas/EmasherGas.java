@@ -57,22 +57,10 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import emasher.api.MixerRecipeRegistry;
-import emasher.api.ModuleRegistry;
-import emasher.api.PhotobioReactorRecipeRegistry;
-import emasher.api.Registry;
+import emasher.api.*;
 import emasher.core.*;
 import emasher.core.item.ItemEmasherGeneric;
-import emasher.gas.block.BlockDuct;
-import emasher.gas.block.BlockNaturalGas;
-import emasher.gas.block.BlockGasGeneric;
-import emasher.gas.block.BlockShaleResource;
-import emasher.gas.block.BlockHydrogen;
-import emasher.gas.block.BlockMineGas;
-import emasher.gas.block.BlockNeurotoxin;
-import emasher.gas.block.BlockPropellent;
-import emasher.gas.block.BlockSmoke;
-import emasher.gas.block.BlockWeaponizedGas;
+import emasher.gas.block.*;
 import emasher.gas.fluids.FluidGas;
 import emasher.gas.item.*;
 import emasher.gas.tileentity.TileDuct;
@@ -83,9 +71,12 @@ import emasher.gas.worldgen.WorldGenGasVent;
 import emasher.gas.worldgen.WorldGenerationUpdater;
 import emasher.sockets.items.ItemBlockSocket;
 import emasher.sockets.SocketsMod;
+import emasher.sockets.items.ItemDusts;
+
+import buildcraft.BuildCraftEnergy;
 
 
-@Mod(modid="gascraft", name="GasCraft", version="2.0.1.1", dependencies = "required-after:eng_toolbox")
+@Mod(modid="gascraft", name="GasCraft", version="2.0.2.0", dependencies = "required-after:eng_toolbox")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false, 
 clientPacketHandlerSpec =
 @SidedPacketHandler(channels = {"GasCraft" }, packetHandler = PacketHandler.class),
@@ -108,6 +99,7 @@ public class EmasherGas
 	public static BlockGasGeneric smoke;
 	public static BlockGasGeneric toxicGas;
 	public static BlockGasGeneric neurotoxin;
+	public static BlockGasGeneric corrosiveGas;
 	
 	public static Block shaleResource;
 	public static Block chimney;
@@ -129,6 +121,7 @@ public class EmasherGas
 	public static Fluid fluidSmoke;
 	public static Fluid fluidToxicGas;
 	public static Fluid fluidNeurotoxin;
+	public static Fluid fluidCorrosiveGas;
 	
 	public static WorldGenGas gasGenerator = new WorldGenGas();
 	public static WorldGenGasVent gasVentGenerator = new WorldGenGasVent();
@@ -141,6 +134,7 @@ public class EmasherGas
 	public int smokeID;
 	public int toxicGasID;
 	public int neurotoxinID;
+	public int corrosiveGasID;
 	
 	public int vialID;
 	public int filledVialID;
@@ -202,6 +196,7 @@ public class EmasherGas
 		smokeID = config.get(Configuration.CATEGORY_BLOCK, "Smoke ID", 2098).getInt();
 		toxicGasID = config.get(Configuration.CATEGORY_BLOCK, "Weaponized Gas Block ID", 2099).getInt();
 		neurotoxinID = config.get(Configuration.CATEGORY_BLOCK, "Neurotoxin ID", 2100).getInt();
+		corrosiveGasID = config.get(Configuration.CATEGORY_BLOCK, "Corrosive Gas ID", 2101).getInt();
 		
 		vialID = config.get(Configuration.CATEGORY_ITEM, "Vial ID", 2041).getInt();
 		filledVialID = config.get(Configuration.CATEGORY_GENERAL, "Filled Vial ID", 2042).getInt();
@@ -264,6 +259,7 @@ public class EmasherGas
 		smoke = (BlockGasGeneric)new BlockSmoke(smokeID).setBlockUnbreakable().setLightValue(0.0F).setUnlocalizedName("smoke").setResistance(0.0F);
 		toxicGas = (BlockGasGeneric)new BlockWeaponizedGas(toxicGasID).setBlockUnbreakable().setLightValue(0.0F).setUnlocalizedName("toxicGas").setResistance(0.0F);
 		neurotoxin = (BlockGasGeneric)new BlockNeurotoxin(neurotoxinID).setBlockUnbreakable().setLightValue(0.0F).setUnlocalizedName("neurotoxin").setResistance(0.0F);
+		corrosiveGas = (BlockGasGeneric) new BlockCorrosiveGas(corrosiveGasID).setBlockUnbreakable().setLightValue(0.0F).setUnlocalizedName("corrosiveGas").setResistance(0.0F);
 		
 		shaleResource = new BlockShaleResource(shaleID);
 		Item.itemsList[shaleResource.blockID] = new ItemBlockShaleResource(shaleResource.blockID - 256);
@@ -280,6 +276,7 @@ public class EmasherGas
 		GameRegistry.registerBlock(smoke, "smoke");
 		GameRegistry.registerBlock(toxicGas, "weaponizedGas");
 		GameRegistry.registerBlock(neurotoxin, "neurotoxin");
+		GameRegistry.registerBlock(corrosiveGas, "corrosiveGas");
 		GameRegistry.registerBlock(gasPocket, "gasPocket");
 		
 		
@@ -294,6 +291,7 @@ public class EmasherGas
 		fluidSmoke = new FluidGas("gasCraft_smoke", smoke);
 		fluidToxicGas = new FluidGas("gasCraft_toxicGas", toxicGas);
 		fluidNeurotoxin = new FluidGas("gasCraft_neurotoxin", neurotoxin);
+		fluidCorrosiveGas = new FluidGas("gasCraft_corrosiveGas", corrosiveGas);
 		
 		FluidRegistry.registerFluid(fluidNaturalGas);
 		FluidRegistry.registerFluid(fluidPropellent);
@@ -301,6 +299,7 @@ public class EmasherGas
 		FluidRegistry.registerFluid(fluidSmoke);
 		FluidRegistry.registerFluid(fluidToxicGas);
 		FluidRegistry.registerFluid(fluidNeurotoxin);
+		FluidRegistry.registerFluid(fluidCorrosiveGas);
 
 		naturalGas.blocksFluid = fluidNaturalGas;
 		propellent.blocksFluid = fluidPropellent;
@@ -308,6 +307,7 @@ public class EmasherGas
 		smoke.blocksFluid = fluidSmoke;
 		toxicGas.blocksFluid = fluidToxicGas;
 		neurotoxin.blocksFluid = fluidNeurotoxin;
+		corrosiveGas.blocksFluid = fluidCorrosiveGas;
 		
 		registerFluidContainers();
 	}
@@ -323,6 +323,7 @@ public class EmasherGas
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidSmoke, 4000), new ItemStack(vialFilled, 1, 3), new ItemStack(vial));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidToxicGas, 4000), new ItemStack(vialFilled, 1, 4), new ItemStack(vial));
 		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidNeurotoxin, 4000), new ItemStack(vialFilled, 1, 5), new ItemStack(vial));
+		FluidContainerRegistry.registerFluidContainer(new FluidStack(fluidCorrosiveGas, 4000), new ItemStack(vialFilled, 1, 6), new ItemStack(vial));
 		
 		LanguageRegistry.instance().addStringLocalization("item.gasVialFilled.naturalGas.name", "Natural Gas Vial");
 		LanguageRegistry.instance().addStringLocalization("item.gasVialFilled.propellent.name", "Propellent Vial");
@@ -330,6 +331,7 @@ public class EmasherGas
 		LanguageRegistry.instance().addStringLocalization("item.gasVialFilled.smoke.name", "Smoke Vial");
 		LanguageRegistry.instance().addStringLocalization("item.gasVialFilled.toxicGas.name", "Toxic Gas Vial");
 		LanguageRegistry.instance().addStringLocalization("item.gasVialFilled.neurotoxin.name", "Neurotoxin Vial");
+		LanguageRegistry.instance().addStringLocalization("item.gasVialFilled.corrosiveGas.name", "Corrosive Gas Vial");
 	}
 	
 	private void registerItems()
@@ -346,6 +348,7 @@ public class EmasherGas
 		LanguageRegistry.addName(smoke, "Smoke");
 		LanguageRegistry.addName(toxicGas, "Weaponized Gas");
 		LanguageRegistry.addName(neurotoxin, "Deadly Neurotoxin");
+		LanguageRegistry.addName(corrosiveGas, "Corrosive Gas");
 		LanguageRegistry.addName(vial, "Empty Gas Vial");
 		LanguageRegistry.addName(gasMask, "Gas Mask");
 		LanguageRegistry.addName(chimney, "Chimney");
@@ -359,6 +362,7 @@ public class EmasherGas
 		PhotobioReactorRecipeRegistry.registerRecipe(new ItemStack(EmasherCore.pondScum), new FluidStack(fluidToxicGas, 1000), new FluidStack(fluidNeurotoxin, 500));
 		
 		MixerRecipeRegistry.registerRecipe(new ItemStack(Item.gunpowder), new FluidStack(fluidPropellent, 1000), new FluidStack(fluidToxicGas, 500));
+		MixerRecipeRegistry.registerRecipe(new ItemStack(SocketsMod.dusts, 1, ItemDusts.Const.lime.ordinal()), new FluidStack(fluidPropellent, 100), new FluidStack(fluidCorrosiveGas, 100));
 		
 		FuelManager.addBoilerFuel(fluidNaturalGas, 20000);
 		FuelManager.addBoilerFuel(fluidHydrogen, 20000);
@@ -417,6 +421,15 @@ public class EmasherGas
 		Registry.addItem("vialFilled", this.vialFilled);
 		Registry.addItem("gasMask", this.gasMask);
 		Registry.addItem("smokeGrenade", this.smokeGrenade);
+		
+		GeneratorFuelRegistry.registerFuel(new FluidStack(fluidNaturalGas, 1000), 500, 6, true);
+		GeneratorFuelRegistry.registerFuel(new FluidStack(fluidHydrogen, 1000), 500, 6, false);
+		
+		if(Loader.isModLoaded("BuildCraft|Core"))
+		{
+			GeneratorFuelRegistry.registerFuel(new FluidStack(BuildCraftEnergy.fluidFuel, 1000), 1000, 6, true);
+		}
+		
 	}
 	
 	

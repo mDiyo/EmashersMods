@@ -127,6 +127,12 @@ public class TileSocket extends SocketTileAccess implements ISpecialInventory, I
 	{
 		if(! worldObj.isRemote)
 		{
+			if(worldObj.getBlockId(xCoord, yCoord, zCoord) != SocketsMod.socket.blockID)
+			{
+				worldObj.removeBlockTileEntity(xCoord, yCoord, zCoord);
+				return;
+			}
+			
 			ForgeDirection d;
 			SocketModule m;
 			SideConfig c;
@@ -267,6 +273,11 @@ public class TileSocket extends SocketTileAccess implements ISpecialInventory, I
 	    
 	    for(int i = 0; i < 3; i++)
 	    {
+	    	if(data.hasKey("tankCap" + i))
+	    	{
+	    		tanks[i] = new FluidTank(data.getInteger("tankCap" + i));
+	    	}
+	    	
 	    	if(data.hasKey("Fluid" + i))
 	    	{
 	    		tanks[i].setFluid(FluidStack.loadFluidStackFromNBT(data.getCompoundTag("Fluid" + i)));
@@ -356,6 +367,7 @@ public class TileSocket extends SocketTileAccess implements ISpecialInventory, I
 			
 			if(tanks[i].getFluid() != null)
 			{
+				data.setInteger("tankCap" + i, tanks[i].getCapacity());
 				data.setTag("Fluid" + i, tanks[i].getFluid().writeToNBT(new NBTTagCompound()));
 			}
 			
@@ -1413,7 +1425,7 @@ public class TileSocket extends SocketTileAccess implements ISpecialInventory, I
 					int amnt = this.addItemInternal(stack, doOutput, mConfig.inventory);
 					if(doOutput)stack.stackSize -= amnt;
 					getSide(d).updateSide(configs[i], this, d);
-					return origAmnt - amnt;
+					return amnt;
 				}
 			}
 		}
@@ -1437,7 +1449,7 @@ public class TileSocket extends SocketTileAccess implements ISpecialInventory, I
 					int amnt = this.fillInternal(mConfig.tank, stack, doOutput);
 					if(doOutput)stack.amount -= amnt;
 					getSide(d).updateSide(configs[i], this, d);
-					return origAmnt - amnt;
+					return amnt;
 				}
 			}
 		}

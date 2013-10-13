@@ -83,9 +83,4 @@ public class BlockNaturalGas extends BlockGasGeneric
     	}
 		
     }
-	
-	
-	
-	
-	
 }

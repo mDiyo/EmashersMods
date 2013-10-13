@@ -11,6 +11,7 @@ import emasher.api.SocketModule;
 import emasher.sockets.BlockSocket;
 import emasher.sockets.SocketsMod;
 import emasher.sockets.TileSocket;
+import emasher.sockets.modules.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -105,10 +106,10 @@ public class SocketRenderer extends TileEntitySpecialRenderer
 			
 			Icon[] icons = new Icon[4];
 			
-			icons[0] = b.tankIndicator[ts.tankIndicatorIndex(side)];
-			icons[1] = b.inventoryIndicator[ts.inventoryIndicatorIndex(side)];
-			icons[2] = b.rsIndicator[ts.rsIndicatorIndex(side)];
-			icons[3] = b.latchIndicator[ts.latchIndicatorIndex(side)];
+			if(m.hasIndicator(0))icons[0] = b.tankIndicator[ts.tankIndicatorIndex(side)];
+			if(m.hasIndicator(1))icons[1] = b.inventoryIndicator[ts.inventoryIndicatorIndex(side)];
+			if(m.hasIndicator(2))icons[2] = b.rsIndicator[ts.rsIndicatorIndex(side)];
+			if(m.hasIndicator(3))icons[3] = b.latchIndicator[ts.latchIndicatorIndex(side)];
 			
 			if(! ts.sideLocked[side]) for(int i = 0; i < 4; i++)
 			{
@@ -134,7 +135,18 @@ public class SocketRenderer extends TileEntitySpecialRenderer
 				
 				if(ls != null)
 				{
-						float scale = ts.tanks[tankToRender].getFluid().amount / 8000.0F;
+						int cap = 8000;
+						
+						for(int i = 0; i < 6; i++)
+						{
+							SocketModule m2 = ts.getSide(ForgeDirection.getOrientation(i));
+							if(m2 instanceof ModPressurizer)
+							{
+								cap = 32000;
+								break;
+							}
+						}
+						float scale = ts.tanks[tankToRender].getFluid().amount / (float) cap;
 						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("textures/atlas/blocks.png"));
 						//bindTextureByName(ls.getTextureSheet());
 						if(ls.getFluid() != null && ls.getFluid().getIcon() != null)

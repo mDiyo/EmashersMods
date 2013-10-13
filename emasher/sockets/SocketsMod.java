@@ -44,7 +44,7 @@ import emasher.sockets.items.*;
 import emasher.sockets.modules.*;
 import emasher.sockets.client.ClientProxy;
 
-@Mod(modid="eng_toolbox", name="Engineer's Toolbox", version="1.1.4.4", dependencies = "required-after:emashercore")
+@Mod(modid="eng_toolbox", name="Engineer's Toolbox", version="1.1.5.0", dependencies = "required-after:emashercore")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false,
 clientPacketHandlerSpec =
 @SidedPacketHandler(channels = {"Emasher_Sockets" }, packetHandler = ClientPacketHandler.class),
@@ -117,6 +117,7 @@ public class SocketsMod
 	public boolean enableMultiSmelter;
 	public boolean enableKiln;
 	public boolean enableCentrifuge;
+	public boolean enableHusher;
 	public static boolean cbTextures;
 	public static boolean smeltSand;
 	
@@ -217,6 +218,7 @@ public class SocketsMod
 		enableHydro = config.get(Configuration.CATEGORY_GENERAL, "Enable Hydroelectric Turbines", true).getBoolean(true);
 		enablePiezo = config.get(Configuration.CATEGORY_GENERAL, "Enable Piezo Electric Tiles", true).getBoolean(true);
 		enableWaterIntake = config.get(Configuration.CATEGORY_GENERAL, "Enable Water Intake", true).getBoolean(true);
+		enableHusher = config.get(Configuration.CATEGORY_GENERAL, "Enable Husher", true).getBoolean(true);
 		cbTextures = config.get(Configuration.CATEGORY_GENERAL, "Enable Colour Blind Mode", false).getBoolean(false);
 		EUPerMJ = config.get(Configuration.CATEGORY_GENERAL, "EU Per MJ", 2.44).getDouble(2.44);
 		smeltSand = config.get(Configuration.CATEGORY_GENERAL, "Hand boiler smelts sand", false).getBoolean(false);
@@ -308,6 +310,9 @@ public class SocketsMod
 		if(enableMultiSmelter) ModuleRegistry.registerModule(new ModMultiSmelter(92));
 		if(enableCentrifuge) ModuleRegistry.registerModule(new ModCentrifuge(93));
 		ModuleRegistry.registerModule(new ModMixer(94));
+		ModuleRegistry.registerModule(new ModPressurizer(95));
+		ModuleRegistry.registerModule(new ModRangeSelector(96));
+		if(enableHusher) ModuleRegistry.registerModule(new ModHusher(97));
 		
 		//Register 3rd party modules
 		for(IModuleRegistrationManager reg : ModuleRegistry.registers)

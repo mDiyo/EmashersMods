@@ -80,13 +80,13 @@ public abstract class SocketModule
 	/**
 	 * Used to add a tooltip to a module
 	 */
-	public void getToolTip(List l) {}
+	public void getToolTip(List<Object> l) {}
 	
 	/**
 	 * Used to add configuration instructions
 	 */
 	
-	public void getIndicatorKey(List l) {}
+	public void getIndicatorKey(List<Object> l) {}
 	
 	/**
 	 * 

@@ -113,7 +113,8 @@ public class PacketHandler implements IPacketHandler
 		out[26] = boolToByte(ts.sideLocked[side]);
 		
 		//PacketDispatcher.sendPacketToAllPlayers(new Packet250CustomPayload(networkChannel, out));
-		PacketDispatcher.sendPacketToAllInDimension(new Packet250CustomPayload(networkChannel, out), ts.worldObj.provider.dimensionId);
+		//PacketDispatcher.sendPacketToAllInDimension(new Packet250CustomPayload(networkChannel, out), ts.worldObj.provider.dimensionId);
+		PacketDispatcher.sendPacketToAllAround(ts.xCoord, ts.yCoord, ts.zCoord, 160, ts.worldObj.provider.dimensionId, new Packet250CustomPayload(networkChannel, out));
 	}
 	
 	public void SendClientInventorySlot(TileSocket ts, int inventory)
@@ -141,7 +142,8 @@ public class PacketHandler implements IPacketHandler
 		
 		
 		//PacketDispatcher.sendPacketToAllPlayers(new Packet250CustomPayload(networkChannel, out));
-		PacketDispatcher.sendPacketToAllInDimension(new Packet250CustomPayload(networkChannel, out), ts.worldObj.provider.dimensionId);
+		//PacketDispatcher.sendPacketToAllInDimension(new Packet250CustomPayload(networkChannel, out), ts.worldObj.provider.dimensionId);
+		PacketDispatcher.sendPacketToAllAround(ts.xCoord, ts.yCoord, ts.zCoord, 160, ts.worldObj.provider.dimensionId, new Packet250CustomPayload(networkChannel, out));
 	}
 	
 	public void SendClientTankSlot(TileSocket ts, int tank)
@@ -171,7 +173,8 @@ public class PacketHandler implements IPacketHandler
 		out[26] = (byte)tank;
 		
 		//PacketDispatcher.sendPacketToAllPlayers(new Packet250CustomPayload(networkChannel, out));
-		PacketDispatcher.sendPacketToAllInDimension(new Packet250CustomPayload(networkChannel, out), ts.worldObj.provider.dimensionId);
+		//PacketDispatcher.sendPacketToAllInDimension(new Packet250CustomPayload(networkChannel, out), ts.worldObj.provider.dimensionId);
+		PacketDispatcher.sendPacketToAllAround(ts.xCoord, ts.yCoord, ts.zCoord, 160, ts.worldObj.provider.dimensionId, new Packet250CustomPayload(networkChannel, out));
 	}
 	
 	public void doClick(SocketTileAccess ts, ForgeDirection side)
@@ -184,7 +187,8 @@ public class PacketHandler implements IPacketHandler
 		toByte(out, ts.zCoord, 9);
 		out[13] = (byte)side.ordinal();
 		
-		PacketDispatcher.sendPacketToAllInDimension(new Packet250CustomPayload(networkChannel, out), ts.worldObj.provider.dimensionId);
+		//PacketDispatcher.sendPacketToAllInDimension(new Packet250CustomPayload(networkChannel, out), ts.worldObj.provider.dimensionId);
+		PacketDispatcher.sendPacketToAllAround(ts.xCoord, ts.yCoord, ts.zCoord, 160, ts.worldObj.provider.dimensionId, new Packet250CustomPayload(networkChannel, out));
 		
 	}
 	

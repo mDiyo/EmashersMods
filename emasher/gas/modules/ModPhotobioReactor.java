@@ -105,7 +105,7 @@ public class ModPhotobioReactor extends SocketModule
 					if(product != null && r.getFluidInput().amount <= toIntakeFluid.amount)
 					{
 						ts.extractItemInternal(true, config.inventory, 1);
-						ts.drainInternal(config.tank, toIntakeFluid.amount, true);
+						ts.drainInternal(config.tank, r.getFluidInput().amount, true);
 						
 						ts.sideInventory.setInventorySlotContents(side.ordinal(), fluidToItem(product));
 						config.meta = 400;

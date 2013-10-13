@@ -71,7 +71,7 @@ import tconstruct.library.TConstructRegistry;
 import tconstruct.library.crafting.Smeltery;
 
 
-@Mod(modid="emashercore", name="Emasher Resource", version="1.2.1.3")
+@Mod(modid="emashercore", name="Emasher Resource", version="1.2.1.4")
 @NetworkMod(clientSideRequired=true, serverSideRequired=false)
 public class EmasherCore 
 {
@@ -406,7 +406,7 @@ public class EmasherCore
 		LanguageRegistry.instance().addStringLocalization("tile.e_metal.e_blockTin.name", "Tin Block");
 		
 		OreDictionary.registerOre("blockAluminum", new ItemStack(metal, 1, 0));
-		OreDictionary.registerOre("blockAluminium", new ItemStack(metal, 1, 0));
+		//OreDictionary.registerOre("blockAluminium", new ItemStack(metal, 1, 0));
 
 		OreDictionary.registerOre("blockBronze", new ItemStack(metal, 1, 1));
 		OreDictionary.registerOre("blockCopper", new ItemStack(metal, 1, 2));
@@ -435,7 +435,7 @@ public class EmasherCore
 		LanguageRegistry.instance().addStringLocalization("tile.e_ore.e_oreSapphire.name", "Sapphire Ore");
 		
 		OreDictionary.registerOre("oreAluminum", new ItemStack(ore, 1, 0));
-		OreDictionary.registerOre("oreAluminium", new ItemStack(ore, 1, 0));
+		//OreDictionary.registerOre("oreAluminium", new ItemStack(ore, 1, 0));
 		OreDictionary.registerOre("oreTin", new ItemStack(ore, 1, 1));
 		OreDictionary.registerOre("oreEmery", new ItemStack(ore, 1, 2));
 		OreDictionary.registerOre("oreLead", new ItemStack(ore, 1, 3));
@@ -460,7 +460,7 @@ public class EmasherCore
 		LanguageRegistry.instance().addStringLocalization("item.e_ingot.e_ingotTin.name", "Tin Ingot");
 		
 		OreDictionary.registerOre("ingotAluminum", new ItemStack(ingot, 1, 0));
-		OreDictionary.registerOre("ingotAluminium", new ItemStack(ingot, 1, 0));
+		//OreDictionary.registerOre("ingotAluminium", new ItemStack(ingot, 1, 0));
 		OreDictionary.registerOre("ingotBronze", new ItemStack(ingot, 1, 1));
 		OreDictionary.registerOre("ingotCopper", new ItemStack(ingot, 1, 2));
 		OreDictionary.registerOre("ingotLead", new ItemStack(ingot, 1, 3));
